@@ -3,6 +3,7 @@ package org.spring.metro.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,18 +48,18 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
                         // Public read-only endpoints
-                        .requestMatchers("GET", "/api/stations/**").permitAll()
-                        .requestMatchers("GET", "/api/routes/**").permitAll()
-                        .requestMatchers("GET", "/api/schedules/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/stations/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/routes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/schedules/**").permitAll()
 
                         // Admin-only write endpoints
-                        .requestMatchers("POST", "/api/stations/**", "/api/routes/**",
+                        .requestMatchers(HttpMethod.POST, "/api/stations/**", "/api/routes/**",
                                 "/api/schedules/**", "/api/trains/**", "/api/fares/**")
                         .hasAuthority("StaffAdmin")
-                        .requestMatchers("PUT", "/api/stations/**", "/api/routes/**",
+                        .requestMatchers(HttpMethod.PUT, "/api/stations/**", "/api/routes/**",
                                 "/api/schedules/**", "/api/trains/**", "/api/fares/**")
                         .hasAuthority("StaffAdmin")
-                        .requestMatchers("DELETE", "/api/stations/**", "/api/routes/**",
+                        .requestMatchers(HttpMethod.DELETE, "/api/stations/**", "/api/routes/**",
                                 "/api/schedules/**", "/api/trains/**", "/api/fares/**")
                         .hasAuthority("StaffAdmin")
 

@@ -20,6 +20,9 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "email", nullable = false, unique = true, length = 100)
+    private String email;
+
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
@@ -41,11 +44,4 @@ public class User {
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
-
-    @Column(name = "hire_date")
-    private LocalDate hireDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id")
-    private Station station;
 }

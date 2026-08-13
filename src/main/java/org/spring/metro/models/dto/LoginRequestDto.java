@@ -1,6 +1,6 @@
 package org.spring.metro.models.dto;
 
 public record LoginRequestDto(
-        String contact,
+        String email,
         String password
 ) {}

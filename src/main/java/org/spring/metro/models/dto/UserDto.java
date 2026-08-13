@@ -1,15 +1,15 @@
 package org.spring.metro.models.dto;
 
+import org.spring.metro.models.enums.Role;
+
 import java.time.LocalDate;
 
 public record UserDto(
         Long userId,
-        String firstName,
-        String lastName,
-        String role,
+        String name,
+        String email,
+        Role role,
         String contact,
         LocalDate registrationDate,
-        Boolean isActive,
-        LocalDate hireDate,
-        Long stationId
+        Boolean isActive
 ) {}
