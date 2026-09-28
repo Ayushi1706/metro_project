@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MaintenanceIssueRepository extends JpaRepository<MaintenanceIssue, Long> {
+public interface MaintenanceIssueRepository extends JpaRepository<MaintenanceIssue, String> {
+
 }
