@@ -18,5 +18,5 @@ public class RouteStationId implements Serializable {
     private Long routeId;
 
     @Column(name = "station_id")
-    private Long stationId;
+    private String stationId;
 }
