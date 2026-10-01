@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/stations/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/routes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/schedules/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/trains/**").permitAll()
 
                         // Admin-only write endpoints
                         .requestMatchers(HttpMethod.POST, "/api/stations/**", "/api/routes/**",
