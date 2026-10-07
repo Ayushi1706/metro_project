@@ -46,7 +46,7 @@ public class TicketService {
                 .orElseThrow(() -> new EntityNotFoundException("Destination station not found: " + request.destinationStationId()));
 
         Fare fare = fareRepository
-                .findBySourceStationAndDestStation(source, dest)
+                .findBySourceStationAndDestinationStation(source, dest)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "No fare defined for " + source.getStationId() + " -> " + dest.getStationId()));
 
