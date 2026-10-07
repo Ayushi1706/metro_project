@@ -36,7 +36,7 @@ public class TrainController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Train> createTrain(
             @RequestBody Train train) {
 

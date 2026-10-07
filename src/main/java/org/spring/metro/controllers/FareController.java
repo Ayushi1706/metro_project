@@ -6,6 +6,7 @@ import org.spring.metro.models.dto.FareDto;
 import org.spring.metro.service.FareService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class FareController {
     private final FareService fareService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<FareDto> createFare(@RequestBody FareDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(fareService.createFare(dto));
     }
@@ -40,11 +42,13 @@ public class FareController {
     }
 
     @PutMapping("/{fareId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<FareDto> updateFare(@PathVariable String fareId, @RequestBody FareDto dto) {
         return ResponseEntity.ok(fareService.updateFare(fareId, dto));
     }
 
     @DeleteMapping("/{fareId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Void> deleteFare(@PathVariable String fareId) {
         fareService.deleteFare(fareId);
         return ResponseEntity.noContent().build();

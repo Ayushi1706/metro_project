@@ -36,7 +36,7 @@ public class StationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Station> createStation(
             @RequestBody Station station) {
 
@@ -46,7 +46,7 @@ public class StationController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Station> updateStation(
             @PathVariable String id,
             @RequestBody Station station) {
@@ -57,7 +57,7 @@ public class StationController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Void> deleteStation(
             @PathVariable String id) {
 

@@ -9,6 +9,7 @@ import org.spring.metro.repository.PaymentRepository;
 import org.spring.metro.repository.TicketRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final TicketRepository ticketRepository;
 
+    @Transactional
     public PaymentDto processPayment(PaymentRequestDto request) {
 
         Ticket ticket = ticketRepository.findById(request.ticketId())

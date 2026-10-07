@@ -36,7 +36,7 @@ public class ScheduleController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Schedule> createSchedule(
             @RequestBody Schedule schedule) {
 
@@ -46,7 +46,7 @@ public class ScheduleController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Schedule> updateSchedule(
             @PathVariable Long id,
             @RequestBody Schedule schedule) {
@@ -57,7 +57,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id) {
 
