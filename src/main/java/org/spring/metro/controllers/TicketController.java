@@ -4,9 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.spring.metro.models.dto.TicketBookingRequestDto;
 import org.spring.metro.models.dto.TicketDto;
+import org.spring.metro.service.QrCodeService;
 import org.spring.metro.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,9 @@ import java.util.Map;
 @RequestMapping("/api/tickets")
 @RequiredArgsConstructor
 public class TicketController {
-    @Autowired
-    private TicketService ticketService;
+
+    private final TicketService ticketService;
+    private final QrCodeService qrCodeService;
 
     @PostMapping("/book")
     public ResponseEntity<TicketDto> bookTicket(@RequestBody TicketBookingRequestDto request) {
@@ -28,6 +30,12 @@ public class TicketController {
     @GetMapping("/{ticketId}")
     public ResponseEntity<TicketDto> getTicket(@PathVariable Long ticketId) {
         return ResponseEntity.ok(ticketService.getTicket(ticketId));
+    }
+
+    @GetMapping(value = "/{ticketId}/qr", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getTicketQr(@PathVariable Long ticketId) {
+        TicketDto ticket = ticketService.getTicket(ticketId);
+        return ResponseEntity.ok(qrCodeService.generateTicketQr(ticket));
     }
 
     @GetMapping("/passenger/{passengerId}")
