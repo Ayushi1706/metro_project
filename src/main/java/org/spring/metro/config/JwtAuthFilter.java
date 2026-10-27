@@ -1,3 +1,4 @@
+
 package org.spring.metro.config;
 
 import jakarta.servlet.FilterChain;
@@ -21,9 +22,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getServletPath().startsWith("/api/auth/");
+    }
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
 
@@ -31,15 +39,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             if (jwtTokenProvider.validateToken(token)) {
-                String userId = jwtTokenProvider.getUserIdFromToken(token);
-                String role = jwtTokenProvider.getRoleFromToken(token);
+                String userId =
+                        jwtTokenProvider.getUserIdFromToken(token);
+                String role =
+                        jwtTokenProvider.getRoleFromToken(token);
+
+                if (role != null && role.startsWith("ROLE_")) {
+                    role = role.substring(5);
+                }
 
                 var authorities = List.of(
                         new SimpleGrantedAuthority("ROLE_" + role)
                 );
 
-                var authentication = new UsernamePasswordAuthenticationToken(userId, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                var authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userId, null, authorities);
+
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
             }
         }
 

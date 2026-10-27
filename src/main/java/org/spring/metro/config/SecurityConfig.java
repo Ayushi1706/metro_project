@@ -151,10 +151,7 @@ public class SecurityConfig {
                         // MAINTENANCE
                         // ---------------------------------
                         .requestMatchers("/api/maintenance-issues/**")
-                        .hasAnyRole(
-                                "TECHNICAL_STAFF",
-                                "ADMIN"
-                        )
+                        .hasAnyRole("MAINTENANCE_STAFF", "ADMIN")
 
 
                         // ---------------------------------
