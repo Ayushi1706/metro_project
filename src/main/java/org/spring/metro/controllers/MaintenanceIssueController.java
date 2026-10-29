@@ -255,30 +255,31 @@ public class MaintenanceIssueController {
         return ResponseEntity.ok(issueRepository.save(issue));
     }
 
-    @PutMapping("/{issueId}")
+    @PatchMapping("/{issueId}")
     @Transactional
     public ResponseEntity<MaintenanceIssue> updateDetails(
-            @PathVariable String issueId,
-            @RequestParam(required = false) String issueType,
-            @RequestParam(required = false) String description) {
+        @PathVariable String issueId,
+        @RequestParam(required = false) String issueType,
+        @RequestParam(required = false) String description) {
 
-        MaintenanceIssue issue = findIssue(issueId);
+       MaintenanceIssue issue = findIssue(issueId);
 
-        if (issue.getStatus() == IssueStatus.CLOSED) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, "Cannot edit a closed issue");
-        }
+       if (issue.getStatus() == IssueStatus.CLOSED) {
+          throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Cannot edit a closed issue");
+       }
 
-        if (issueType != null && !issueType.isBlank()) {
-            issue.setIssueType(issueType);
+       if (issueType != null && !issueType.isBlank()) {
+           issue.setIssueType(issueType);
         }
 
         if (description != null) {
-            issue.setDescription(description);
+           issue.setDescription(description);
         }
 
-        return ResponseEntity.ok(issueRepository.save(issue));
-    }
+       return ResponseEntity.ok(issueRepository.save(issue));
+  }
 
     @PutMapping("/{issueId}/reassign")
     @Transactional
