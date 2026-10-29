@@ -28,7 +28,7 @@ public class ScheduleController {
     private final TrainRepository trainRepository;
     private final RouteRepository routeRepository;
 
-    // Get all schedules with pagination
+
     @GetMapping
     @Transactional(readOnly = true)
     public ResponseEntity<Page<Schedule>> getAllSchedules(
@@ -39,7 +39,7 @@ public class ScheduleController {
         );
     }
 
-    // Get a schedule by ID
+
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public ResponseEntity<Schedule> getScheduleById(
@@ -54,7 +54,6 @@ public class ScheduleController {
         return ResponseEntity.ok(schedule);
     }
 
-    // Create a schedule
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -139,7 +138,6 @@ public class ScheduleController {
                 .body(savedSchedule);
     }
 
-    // Update an existing schedule
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -228,7 +226,6 @@ public class ScheduleController {
         return ResponseEntity.ok(updatedSchedule);
     }
 
-    // Delete a schedule
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional

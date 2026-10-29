@@ -3,7 +3,6 @@ package org.spring.metro.controllers;
 import lombok.RequiredArgsConstructor;
 import org.spring.metro.models.entity.Payment;
 import org.spring.metro.models.entity.Ticket;
-import org.spring.metro.models.enums.PaymentMethod;
 import org.spring.metro.repository.PaymentRepository;
 import org.spring.metro.repository.TicketRepository;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,6 @@ public class PaymentController {
     private final PaymentRepository paymentRepository;
     private final TicketRepository ticketRepository;
 
-    // Process a new payment
     @PostMapping
     @Transactional
     public ResponseEntity<Payment> processPayment(
@@ -85,7 +83,6 @@ public class PaymentController {
                 .body(savedPayment);
     }
 
-    // Get payment by payment ID
     @GetMapping("/{paymentId}")
     @Transactional(readOnly = true)
     public ResponseEntity<Payment> getPaymentById(
@@ -100,7 +97,7 @@ public class PaymentController {
         return ResponseEntity.ok(payment);
     }
 
-    // Get payment by ticket ID
+
     @GetMapping("/ticket/{ticketId}")
     @Transactional(readOnly = true)
     public ResponseEntity<Payment> getPaymentByTicketId(

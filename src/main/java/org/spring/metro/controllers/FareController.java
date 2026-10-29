@@ -24,7 +24,6 @@ public class FareController {
     private final FareRepository fareRepository;
     private final StationRepository stationRepository;
 
-    // Create a fare
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -65,21 +64,18 @@ public class FareController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFare);
     }
 
-    // Get all fares
     @GetMapping
     @Transactional(readOnly = true)
     public ResponseEntity<List<Fare>> getAllFares() {
         return ResponseEntity.ok(fareRepository.findAll());
     }
 
-    // Get a fare by ID
     @GetMapping("/{fareId}")
     @Transactional(readOnly = true)
     public ResponseEntity<Fare> getFare(@PathVariable String fareId) {
         return ResponseEntity.ok(findFare(fareId));
     }
 
-    // Get a fare between two stations
     @GetMapping("/between")
     @Transactional(readOnly = true)
     public ResponseEntity<Fare> getFareBetween(
@@ -99,7 +95,6 @@ public class FareController {
         return ResponseEntity.ok(fare);
     }
 
-    // Update a fare
     @PutMapping("/{fareId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -137,7 +132,7 @@ public class FareController {
         return ResponseEntity.ok(fareRepository.save(existingFare));
     }
 
-    // Delete a fare
+
     @DeleteMapping("/{fareId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -146,7 +141,7 @@ public class FareController {
         return ResponseEntity.noContent().build();
     }
 
-    // Find a fare
+
     private Fare findFare(String fareId) {
         return fareRepository.findById(fareId)
                 .orElseThrow(() ->
@@ -154,7 +149,7 @@ public class FareController {
                                 "Fare not found: " + fareId));
     }
 
-    // Find a station
+
     private Station findStation(String stationId) {
         if (stationId == null || stationId.isBlank()) {
             throw new IllegalArgumentException("Station id is required");
@@ -166,7 +161,6 @@ public class FareController {
                                 "Station not found: " + stationId));
     }
 
-    // Validate fare details
     private void validate(
             Station source,
             Station destination,
@@ -183,7 +177,7 @@ public class FareController {
         }
     }
 
-    // Handle not found errors
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(
             EntityNotFoundException exception) {
@@ -192,7 +186,7 @@ public class FareController {
                 .body(Map.of("error", exception.getMessage()));
     }
 
-    // Handle duplicate fare errors
+
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, String>> handleConflict(
             IllegalStateException exception) {
@@ -201,7 +195,6 @@ public class FareController {
                 .body(Map.of("error", exception.getMessage()));
     }
 
-    // Handle invalid requests
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBadRequest(
             IllegalArgumentException exception) {

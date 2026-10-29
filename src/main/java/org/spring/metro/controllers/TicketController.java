@@ -6,12 +6,10 @@ import org.spring.metro.models.entity.Fare;
 import org.spring.metro.models.entity.Station;
 import org.spring.metro.models.entity.Ticket;
 import org.spring.metro.models.entity.User;
-import org.spring.metro.models.enums.TicketType;
 import org.spring.metro.repository.FareRepository;
 import org.spring.metro.repository.StationRepository;
 import org.spring.metro.repository.TicketRepository;
 import org.spring.metro.repository.UserRepository;
-import org.spring.metro.service.QrCodeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +32,11 @@ public class TicketController {
     private final UserRepository userRepository;
     private final StationRepository stationRepository;
     private final FareRepository fareRepository;
-    private final QrCodeService qrCodeService;
 
-    // Book a ticket
+
     @PostMapping("/book")
     @Transactional
-    public ResponseEntity<Ticket> bookTicket(
-            @RequestBody Ticket request) {
+    public ResponseEntity<Ticket> bookTicket(@RequestBody Ticket request) {
 
         if (request.getPassenger() == null ||
                 request.getPassenger().getUserId() == null) {
@@ -123,39 +119,60 @@ public class TicketController {
                 .body(savedTicket);
     }
 
-    // Get a ticket by ID
     @GetMapping("/{ticketId}")
     @Transactional(readOnly = true)
     public ResponseEntity<Ticket> getTicket(
             @PathVariable Long ticketId) {
 
-        Ticket ticket = findTicketOrThrow(ticketId);
-        return ResponseEntity.ok(ticket);
+        return ResponseEntity.ok(findTicketOrThrow(ticketId));
     }
 
-    // Generate a ticket QR code
-    @GetMapping(
-            value = "/{ticketId}/qr",
-            produces = MediaType.IMAGE_PNG_VALUE
-    )
+    @GetMapping(value = "/{ticketId}/qr", produces = MediaType.IMAGE_PNG_VALUE)
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> getTicketQr(
-            @PathVariable Long ticketId) {
+            @PathVariable Long ticketId) throws Exception {
 
         Ticket ticket = findTicketOrThrow(ticketId);
 
-        byte[] qrImage = qrCodeService.generateTicketQr(ticket);
+        String qrContent = "Ticket ID: " + ticket.getTicketId()
+                + "\nPassenger ID: " + ticket.getPassenger().getUserId()
+                + "\nSource: " + ticket.getSourceStation().getStationId()
+                + "\nDestination: " + ticket.getDestStation().getStationId()
+                + "\nValid Until: " + ticket.getValidUntil();
+
+        com.google.zxing.common.BitMatrix matrix =
+                new com.google.zxing.MultiFormatWriter().encode(
+                        qrContent,
+                        com.google.zxing.BarcodeFormat.QR_CODE,
+                        300,
+                        300
+                );
+
+        java.io.ByteArrayOutputStream output =
+                new java.io.ByteArrayOutputStream();
+
+        com.google.zxing.client.j2se.MatrixToImageWriter.writeToStream(
+                matrix,
+                "PNG",
+                output
+        );
 
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
-                .body(qrImage);
+                .body(output.toByteArray());
     }
 
-    // Get tickets belonging to a passenger
     @GetMapping("/passenger/{passengerId}")
     @Transactional(readOnly = true)
     public ResponseEntity<List<Ticket>> getTicketsByPassenger(
             @PathVariable Long passengerId) {
+
+        if (!userRepository.existsById(passengerId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Passenger not found"
+            );
+        }
 
         List<Ticket> tickets =
                 ticketRepository.findByPassenger_UserId(passengerId);
@@ -163,7 +180,6 @@ public class TicketController {
         return ResponseEntity.ok(tickets);
     }
 
-    // Mark a ticket as used
     @PatchMapping("/{ticketId}/use")
     @Transactional
     public ResponseEntity<Ticket> useTicket(
@@ -190,7 +206,6 @@ public class TicketController {
         return ResponseEntity.ok(ticketRepository.save(ticket));
     }
 
-    // Cancel a ticket
     @DeleteMapping("/{ticketId}")
     @Transactional
     public ResponseEntity<Void> cancelTicket(
@@ -237,4 +252,3 @@ public class TicketController {
                 .body(Map.of("error", exception.getMessage()));
     }
 }
-

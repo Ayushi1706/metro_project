@@ -31,7 +31,7 @@ public class MaintenanceIssueController {
     private final StationRepository stationRepository;
     private final UserRepository userRepository;
 
-    // -------------------- Helpers --------------------
+
 
     private MaintenanceIssue findIssue(String issueId) {
         return issueRepository.findById(issueId)

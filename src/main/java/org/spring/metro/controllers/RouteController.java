@@ -21,7 +21,6 @@ public class RouteController {
     private final RouteRepository routeRepository;
     private final StationRepository stationRepository;
 
-    // Create a new route
     @PostMapping
     @Transactional
     public ResponseEntity<Route> createRoute(
@@ -105,7 +104,6 @@ public class RouteController {
                 .body(savedRoute);
     }
 
-    // Get a route by ID
     @GetMapping("/{routeId}")
     @Transactional(readOnly = true)
     public ResponseEntity<Route> getRouteById(
@@ -120,7 +118,7 @@ public class RouteController {
         return ResponseEntity.ok(route);
     }
 
-    // Update an existing route
+
     @PutMapping("/{routeId}")
     @Transactional
     public ResponseEntity<Route> updateRoute(
@@ -207,7 +205,6 @@ public class RouteController {
         return ResponseEntity.ok(updatedRoute);
     }
 
-    // Delete a route
     @DeleteMapping("/{routeId}")
     @Transactional
     public ResponseEntity<Void> deleteRoute(

@@ -30,12 +30,10 @@ public class UserController {
     private final TicketRepository ticketRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Get staff members
     @GetMapping("/staff")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional(readOnly = true)
     public ResponseEntity<Page<Map<String, Object>>> getStaff(
-            @RequestParam(required = false) Long stationId,
             Pageable pageable) {
 
         List<Role> staffRoles = List.of(
@@ -50,7 +48,6 @@ public class UserController {
         return ResponseEntity.ok(staff);
     }
 
-    // Get user by ID
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> getUserById(
@@ -61,7 +58,6 @@ public class UserController {
         return ResponseEntity.ok(toSafeUserResponse(user));
     }
 
-    // Get all users, optionally filtered by role
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional(readOnly = true)
@@ -89,7 +85,7 @@ public class UserController {
         return ResponseEntity.ok(users.map(this::toSafeUserResponse));
     }
 
-    // Update user profile
+
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<Map<String, Object>> updateUser(
@@ -144,7 +140,6 @@ public class UserController {
         return ResponseEntity.ok(toSafeUserResponse(updatedUser));
     }
 
-    // Deactivate user
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -190,7 +185,7 @@ public class UserController {
         return ResponseEntity.ok(tickets);
     }
 
-    // Change password
+
     @PatchMapping("/change-password")
     @Transactional
     public ResponseEntity<Map<String, String>> changePassword(
@@ -240,7 +235,7 @@ public class UserController {
                         HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    // Return safe user details without the password
+
     private Map<String, Object> toSafeUserResponse(User user) {
         return Map.of(
                 "userId", user.getUserId(),
@@ -253,7 +248,7 @@ public class UserController {
         );
     }
 
-    // Return ticket details without serializing related entities
+
     private Map<String, Object> toSafeTicketResponse(Ticket ticket) {
         return Map.of(
                 "ticketId", ticket.getTicketId(),

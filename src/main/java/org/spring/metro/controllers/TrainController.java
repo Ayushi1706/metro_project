@@ -22,7 +22,7 @@ public class TrainController {
 
     private final TrainRepository trainRepository;
 
-    // Get all trains
+
     @GetMapping
     @Transactional(readOnly = true)
     public ResponseEntity<Page<Train>> getAllTrains(Pageable pageable) {
@@ -42,7 +42,6 @@ public class TrainController {
         return ResponseEntity.ok(train);
     }
 
-    // Create train
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -100,7 +99,7 @@ public class TrainController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTrain);
     }
 
-    // Update train
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
@@ -155,13 +154,13 @@ public class TrainController {
             existingTrain.setIsActive(request.getIsActive());
         }
 
-        // Preserve the original createdAt value.
+
         Train updatedTrain = trainRepository.save(existingTrain);
 
         return ResponseEntity.ok(updatedTrain);
     }
 
-    // Delete train
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional

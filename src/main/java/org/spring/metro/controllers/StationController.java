@@ -20,7 +20,7 @@ public class StationController {
 
     private final StationRepository stationRepository;
 
-    // Get all stations with pagination
+
     @GetMapping
     @Transactional(readOnly = true)
     public ResponseEntity<Page<Station>> getAllStations(
@@ -31,7 +31,7 @@ public class StationController {
         );
     }
 
-    // Get a station by ID
+
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public ResponseEntity<Station> getStationById(
@@ -46,7 +46,7 @@ public class StationController {
         return ResponseEntity.ok(station);
     }
 
-    // Create a station
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -116,7 +116,7 @@ public class StationController {
                 .body(savedStation);
     }
 
-    // Update a station
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional
@@ -185,7 +185,7 @@ public class StationController {
         return ResponseEntity.ok(updatedStation);
     }
 
-    // Delete a station
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MAINTENANCE_STAFF')")
     @Transactional

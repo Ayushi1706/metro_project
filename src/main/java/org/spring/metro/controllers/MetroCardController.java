@@ -24,7 +24,7 @@ public class MetroCardController {
     private final MetroCardRepository metroCardRepository;
     private final UserRepository userRepository;
 
-    // Create a metro card
+
     @PostMapping
     @Transactional
     public ResponseEntity<MetroCard> createCard(
@@ -67,7 +67,7 @@ public class MetroCardController {
                 .body(savedCard);
     }
 
-    // Get a metro card by ID
+
     @GetMapping("/{cardId}")
     @Transactional(readOnly = true)
     public ResponseEntity<MetroCard> getCardById(
@@ -81,7 +81,7 @@ public class MetroCardController {
         return ResponseEntity.ok(card);
     }
 
-    // Top up a metro card
+
     @PutMapping("/{cardId}/topup")
     @Transactional
     public ResponseEntity<MetroCard> topUpCard(
@@ -115,7 +115,7 @@ public class MetroCardController {
         return ResponseEntity.ok(updatedCard);
     }
 
-    // Deactivate a metro card
+
     @PutMapping("/{cardId}/deactivate")
     @Transactional
     public ResponseEntity<MetroCard> deactivateCard(
